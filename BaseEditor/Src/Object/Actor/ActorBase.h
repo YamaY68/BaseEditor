@@ -4,13 +4,14 @@
 #include<memory>
 #include<unordered_map>
 #include<typeindex>
-
+#include <iostream>
+#include <filesystem>
 
 #include"../Common/Transform.h"
 #include"Collider/ColliderBase.h"
 
-class AnimationController;
 
+class AnimationController;
 
 class ActorBase
 {
@@ -60,6 +61,7 @@ protected:
 	virtual void InitCollider(void) {};
 
 	void SetOwnerActor2Colliders(void);
+
 
 protected:
 

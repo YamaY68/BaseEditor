@@ -1,4 +1,7 @@
 #pragma once
+#include<vector>
+#include<string>
+
 #include "../SceneBase.h"
 class EditScene :
     public SceneBase
@@ -18,7 +21,13 @@ public:
 	void Release(void) override;
 
 private:
+	//Actor下のオブジェクトのファイル名を取得
+	void RegisterActorFileNames(void);
 
+	
+private:
+	std::vector<std::string>actorFileNames_;
+	std::vector<std::string>componentFileNames_;
 
 };
 

@@ -90,6 +90,9 @@ void GameScene::Init(void)
 		collisionSystem_.AddCollider(actor->GetOwnColliders());
 		EntityId++;
 	}
+
+	
+
 }
 
 void GameScene::Update(void)
