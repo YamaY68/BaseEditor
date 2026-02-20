@@ -2,12 +2,29 @@
 #include <string>
 #include <vector>
 #include <DxLib.h>
+
+
+#include <iostream>
+#include <fstream>
+#include <regex>
+#include <map>
+
 #include "../Common/Vector2.h"
 #include "../Common/Quaternion.h"
 class AsoUtility
 {
 
 public:
+	//変数
+	struct VariableInfo {
+		std::string type;
+		std::string name;
+	};
+	//クラス
+	struct ClassInfo {
+		std::string className;
+		std::vector<VariableInfo> variables; 
+	};
 
 	// ラジアン(rad)・度(deg)変換用
 	static constexpr float RAD2DEG = (180.0f / DX_PI_F);
@@ -114,5 +131,13 @@ public:
 	static void DrawLineDir(const VECTOR& pos, const VECTOR& dir, int color, float len = 50.0f);
 	static void DrawLineXYZ(const VECTOR& pos, const Quaternion& rot, float len = 50.0f);
 
+
+
+
+	static std::vector<ClassInfo>ScanHeader(const std::string& filePath);
+
 };
+
+using ClassInfo = AsoUtility::ClassInfo;
+using VariableInfo = AsoUtility::VariableInfo;
 

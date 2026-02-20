@@ -534,4 +534,41 @@ void AsoUtility::DrawLineXYZ(const VECTOR& pos, const Quaternion& rot, float len
 
 }
 
+std::vector<ClassInfo> AsoUtility::ScanHeader(const std::string& filePath) {
+    std::ifstream file(filePath);
+    if (!file.is_open()) return {};
 
+    std::string line;
+    std::vector<ClassInfo> results;
+    std::regex classRe(R"(^\s*(class|struct)\s+([a-zA-Z0-9_]+))");
+
+    // 型名(match[1]) と 変数名(match[2]) を取得
+    // 型名：英数字、記号(: < >)、スペースを含む塊
+    // 変数名：_ で終わる単語
+    std::regex varRe(R"(^\s*([a-zA-Z0-9_:<>\s]+)\s+([a-zA-Z0-9_]+_)\s*[;=])");
+
+    ClassInfo* currentClass = nullptr;
+
+    while (std::getline(file, line)) {
+        std::smatch match;
+
+        if (std::regex_search(line, match, classRe)) {
+            results.push_back({ match[2].str(), {} });
+            currentClass = &results.back();
+            continue;
+        }
+
+        if (currentClass && std::regex_search(line, match, varRe)) {
+            // match[1] が型名、match[2] が変数名
+            VariableInfo var;
+            var.type = match[1].str();
+            var.name = match[2].str();
+
+            // 型名の前後の余計な空白をトリミング（整理）
+            var.type = std::regex_replace(var.type, std::regex(R"(^\s+|\s+$)"), "");
+
+            currentClass->variables.push_back(var);
+        }
+    }
+    return results;
+}

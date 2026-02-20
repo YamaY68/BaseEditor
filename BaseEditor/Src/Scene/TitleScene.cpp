@@ -11,6 +11,7 @@
 #include "../Object/Actor/Camera/Camera.h"
 #include"../Common/Quaternion.h"
 #include"../Object/Common/AnimationController.h"
+
 TitleScene::TitleScene(void)
 	:
 	imgTitle_(-1),
@@ -22,9 +23,8 @@ TitleScene::~TitleScene(void)
 {
 }
 
-void TitleScene::Load(void)
-{
-
+void TitleScene::Load(void)  
+{  
 }
 
 void TitleScene::Init(void)

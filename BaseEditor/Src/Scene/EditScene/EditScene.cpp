@@ -29,7 +29,8 @@ EditScene::~EditScene(void)
 
 void EditScene::Load(void)
 {
-	RegisterActorFileNames();
+	RegisterActorClassInfo();
+    int a = 0;
 }
 
 void EditScene::Init(void)
@@ -52,35 +53,64 @@ void EditScene::Release(void)
 
 }
 
-void EditScene::RegisterActorFileNames(void) {
-	//探索するファイルの親ディレクトリ
+void EditScene::RegisterActorClassInfo(void)
+{
+    //探索するファイルの親ディレクトリ
     std::string rootPath = "Src/Object/Actor";
 
-	//再帰的にディレクトリを探索
+    //再帰的にディレクトリを探索
     for (const auto& entry : std::filesystem::recursive_directory_iterator(rootPath)) {
 
-		//拡張子が.cppのものだけ
+        //拡張子が.cppを持つ.hファイルのみ
         if (entry.path().extension() == ".cpp") {
 
-			//ディレクトリと拡張子を除いたファイル名
-            std::string actorName = entry.path().stem().string();
-			//フルパス
-            std::string fullPath = entry.path().string();
+            std::filesystem::path headerPath = entry.path().string();
+			headerPath.replace_extension(".h");
             
+			if (!std::filesystem::exists(headerPath))
+			{
+				continue;
+			}
+
+            //ディレクトリと拡張子を除いたファイル名
+			std::string actorName = headerPath.stem().string();
+            //フルパス
+			std::string fullPath = headerPath.string();
+
             //nposは見つからなかったときの値
             //見つからなかったのではない＝見つかった
-			if (fullPath.find("Base") != std::string::npos) {
+			//基底クラスは除外
+            if (fullPath.find("Base") != std::string::npos) {
                 continue;
             }
-			//Componentクラスかどうかで分ける
-			if (fullPath.find("Component") != std::string::npos) {
-				componentFileNames_.push_back(actorName);
+            //Componentクラスかどうかで分ける
+            if (fullPath.find("Component") != std::string::npos) {
+				componentFullPaths_.push_back(fullPath);
             }
-			//Actorクラス
+            //Actorクラス
             else
             {
-                actorFileNames_.push_back(actorName);
+				actorFullPaths_.push_back(fullPath);
             }
         }
+
+        for (const auto& filePath : actorFullPaths_) {
+            auto results = AsoUtility::ScanHeader(filePath);
+         // 登録処理
+            for (const auto& info : results) {
+                classDatabase_[info.className] = info.variables;
+            }
+        }
+
+        //componentFullPaths_ のスキャン部分
+        for (const auto& filePath : componentFullPaths_) {
+            auto results = AsoUtility::ScanHeader(filePath);
+            // 登録処理
+            for (const auto& info : results) {
+                classDatabase_[info.className] = info.variables;
+            }
+        }
+
+
     }
 }

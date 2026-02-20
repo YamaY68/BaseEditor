@@ -1,8 +1,9 @@
 #pragma once
 #include<vector>
 #include<string>
-
+#include<map>
 #include "../SceneBase.h"
+#include"../../Utility/AsoUtility.h"
 class EditScene :
     public SceneBase
 {
@@ -21,13 +22,16 @@ public:
 	void Release(void) override;
 
 private:
-	//Actor下のオブジェクトのファイル名を取得
-	void RegisterActorFileNames(void);
+	//Actor下のオブジェクトのファイルのクラス名と変数名を取得
+	void RegisterActorClassInfo(void);
 
-	
 private:
-	std::vector<std::string>actorFileNames_;
-	std::vector<std::string>componentFileNames_;
+	// ファイルパス管理（これは今まで通りでOK）
+	std::vector<std::string> actorFullPaths_;
+	std::vector<std::string> componentFullPaths_;
+
+	// key: クラス名, value: VariableInfo(型と名前)のリスト
+	std::map<std::string, std::vector<VariableInfo>> classDatabase_;
 
 };
 
