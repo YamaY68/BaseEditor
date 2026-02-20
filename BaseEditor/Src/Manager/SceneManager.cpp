@@ -19,6 +19,7 @@
 #include"../Scene/GameScene.h"
 #include"../Scene/EndScene.h"
 #include"../Scene/EditScene/EditScene.h"
+#include"../Scene/EditScene/EditSelectScene.h"
 
 //#include"../Scene/SceneTitle/SceneTitle.h"
 //#include"../Scene/SceneGame/SceneGame.h"
@@ -62,7 +63,7 @@ void SceneManager::Init(void)
 	preTime_ = std::chrono::system_clock::now();
 
 	// èâä˙ÉVÅ[ÉìÇÃê›íË
-	ChangeScene(SCENE_ID::EDIT);
+	ChangeScene(SCENE_ID::EDITSELECT);
 
 	mainScreen_ = MakeScreen(Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, true);
 }
@@ -219,8 +220,36 @@ void SceneManager::ChangeScene(SCENE_ID scene)
 	case SceneManager::SCENE_ID::GAMEEND:
 		ChangeScene(std::make_shared<EndScene>());
 		break;
+	case SceneManager::SCENE_ID::EDITSELECT:
+		ChangeScene(std::make_shared<EditSelectScene>());
+		break;
 	case SceneManager::SCENE_ID::EDIT:
 		ChangeScene(std::make_shared<EditScene>());
+		break;
+	default:
+		break;
+	}
+}
+
+void SceneManager::ChangeScene(SCENE_ID scene, std::string editFilename)
+{
+	switch (scene)
+	{
+	case SceneManager::SCENE_ID::TITLE:
+		ChangeScene(std::make_shared<TitleScene>());
+		break;
+	case SceneManager::SCENE_ID::GAME:
+		ChangeScene(std::make_shared<GameScene>());
+		break;
+	case SceneManager::SCENE_ID::GAMEEND:
+		ChangeScene(std::make_shared<EndScene>());
+		break;
+	case SceneManager::SCENE_ID::EDITSELECT:
+		ChangeScene(std::make_shared<EditSelectScene>());
+		break;
+	case SceneManager::SCENE_ID::EDIT:
+		ChangeScene(std::make_shared<EditScene>(editFilename));
+		break;
 	default:
 		break;
 	}
@@ -271,6 +300,9 @@ void SceneManager::JumpScene(SCENE_ID scene)
 		break;
 	case SceneManager::SCENE_ID::GAMEEND:
 		ChangeScene(std::make_shared<EndScene>());
+		break;
+	case SceneManager::SCENE_ID::EDITSELECT:
+		ChangeScene(std::make_shared<EditSelectScene>());
 		break;
 	case SceneManager::SCENE_ID::EDIT:
 		ChangeScene(std::make_shared<EditScene>());

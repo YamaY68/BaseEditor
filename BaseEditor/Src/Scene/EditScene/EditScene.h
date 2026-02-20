@@ -9,6 +9,8 @@ class EditScene :
 {
 public:
 	EditScene(void);
+	EditScene(std::string editFilename);
+
 	~EditScene(void)override;
 	void Load(void)override;
 
@@ -33,5 +35,7 @@ private:
 	// key: クラス名, value: VariableInfo(型と名前)のリスト
 	std::map<std::string, std::vector<VariableInfo>> classDatabase_;
 
+	// 編集するゲームのファイルパス
+	std::string editGameFilePath_;
 };
 

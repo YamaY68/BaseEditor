@@ -35,6 +35,7 @@ public:
 	{
 		NONE = -1,
 
+		EDITSELECT,
 		EDIT,
 
 		TITLE,
@@ -59,7 +60,7 @@ public:
 	// ó‘Ô‘JˆÚ
 	void ChangeScene(std::shared_ptr<SceneBase>scene);
 	void ChangeScene(SCENE_ID scene);
-
+	void ChangeScene(SCENE_ID scene, std::string editFilename);
 	// ƒV[ƒ“‚ğV‚µ‚­Ï‚Ş
 	void PushScene(std::shared_ptr<SceneBase>scene);
 	void PushScene(SCENE_ID scene);

@@ -22,6 +22,12 @@ EditScene::EditScene(void)
 
 }
 
+EditScene::EditScene(std::string editFilename)
+{
+    //編集するファイルのフォルダ名
+	editGameFilePath_ = editFilename;
+}
+
 EditScene::~EditScene(void)
 {
 
@@ -30,7 +36,6 @@ EditScene::~EditScene(void)
 void EditScene::Load(void)
 {
 	RegisterActorClassInfo();
-    int a = 0;
 }
 
 void EditScene::Init(void)
@@ -56,17 +61,17 @@ void EditScene::Release(void)
 void EditScene::RegisterActorClassInfo(void)
 {
     //探索するファイルの親ディレクトリ
-    std::string rootPath = "Src/Object/Actor";
+    std::string rootPath =editGameFilePath_+ "/Src/Object/Actor";
 
     //再帰的にディレクトリを探索
     for (const auto& entry : std::filesystem::recursive_directory_iterator(rootPath)) {
 
         //拡張子が.cppを持つ.hファイルのみ
         if (entry.path().extension() == ".cpp") {
-
+			//.cppファイルから対応する.hファイルのパスを生成
             std::filesystem::path headerPath = entry.path().string();
 			headerPath.replace_extension(".h");
-            
+			//.hファイルが存在するか確認
 			if (!std::filesystem::exists(headerPath))
 			{
 				continue;
